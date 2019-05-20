@@ -118,7 +118,7 @@ public class DummyGame implements IGameLogic {
         camera.moveRotation(0, 0, cameraInc.w * CAMERA_ROT_STEP);
 
         // Update camera based on mouse            
-        if (mouseInput.isRightButtonPressed()) {
+        if (mouseInput.isLeftButtonPressed()) {
             Vector2f rotVec = mouseInput.getDisplVec();
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         }

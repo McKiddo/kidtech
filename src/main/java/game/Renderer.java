@@ -19,7 +19,7 @@ public class Renderer {
 
     private static final float Z_NEAR = 0.01f;
 
-    private static final float Z_FAR = 1000.f;
+    private static final float Z_FAR = 1000.0f;
 
     private final Transformation transformation;
 
