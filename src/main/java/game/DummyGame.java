@@ -110,8 +110,16 @@ public class DummyGame implements IGameLogic {
             this.pointLight.getPosition().y += 0.1f;
         }
 
-        if (mouseInput.getWheelVelocity() != 0) {
-            gameObjects[0].setScale(gameObjects[0].getScale() + mouseInput.getWheelVelocity() / 100);
+        float verticalVelocity = mouseInput.getWheelVerticalVelocity();
+        float horizontalVelocity = mouseInput.getWheelHorizontalVelocity();
+
+        if (Math.abs(verticalVelocity) > 0.4) {
+            gameObjects[0].setScale(gameObjects[0].getScale() + verticalVelocity / 100);
+        }
+
+        if (Math.abs(horizontalVelocity) > 0.4) {
+            Vector3f rot = gameObjects[0].getRotation();
+            gameObjects[0].setRotation(rot.x, rot.y + horizontalVelocity, rot.z);
         }
     }
 
