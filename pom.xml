@@ -24,7 +24,7 @@
         <lwjgl.version>3.2.0</lwjgl.version>
         <joml.version>1.9.11</joml.version>
         <pngdecoder.version>1.0</pngdecoder.version>
-        <lwjgl.natives>natives-windows</lwjgl.natives>
+        <lwjgl.natives>natives-macos</lwjgl.natives>
     </properties>
 
     <dependencies>

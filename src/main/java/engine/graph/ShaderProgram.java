@@ -9,7 +9,7 @@ import org.joml.Vector4f;
 import static org.lwjgl.opengl.GL20.*;
 import org.lwjgl.system.MemoryStack;
 
-public class ShaderProgram {
+public class    ShaderProgram {
 
     private final int programId;
 

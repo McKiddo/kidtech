@@ -110,9 +110,5 @@ void main()
     vec4 diffuseSpecularComp = calcDirectionalLight(directionalLight, mvVertexPos, mvVertexNormal);
     diffuseSpecularComp += calcPointLight(pointLight, mvVertexPos, mvVertexNormal);
 
-    vec4 tempColor = ambientC * vec4(ambientLight, 1) + diffuseSpecularComp;
-        //tempColor.r = round(tempColor.r * 16) / 16;
-        //tempColor.g = round(tempColor.g * 8) / 8;
-        //tempColor.b = round(tempColor.b * 4) / 4;
-    fragColor = tempColor;
+    fragColor = ambientC * vec4(ambientLight, 1) + diffuseSpecularComp;
 }

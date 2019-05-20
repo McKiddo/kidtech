@@ -49,6 +49,7 @@ public class Renderer {
         shaderProgram.createUniform("specularPower");
         shaderProgram.createUniform("ambientLight");
         shaderProgram.createPointLightUniform("pointLight");
+        shaderProgram.createDirectionalLightUniform("directionalLight");
     }
 
     public void clear() {
@@ -56,7 +57,7 @@ public class Renderer {
     }
 
     public void render(Window window, Camera camera, GameObject[] gameObjects, Vector3f ambientLight,
-                       PointLight pointLight) {
+                       PointLight pointLight, DirectionalLight directionalLight) {
 
         clear();
 
@@ -86,6 +87,13 @@ public class Renderer {
         lightPos.y = aux.y;
         lightPos.z = aux.z;
         shaderProgram.setUniform("pointLight", currPointLight);
+
+        // Get a copy of the directional light object and transform its position to view coordinates
+        DirectionalLight currDirLight = new DirectionalLight(directionalLight);
+        Vector4f dir = new Vector4f(currDirLight.getDirection(), 0);
+        dir.mul(viewMatrix);
+        currDirLight.setDirection(new Vector3f(dir.x, dir.y, dir.z));
+        shaderProgram.setUniform("directionalLight", currDirLight);
 
         shaderProgram.setUniform("texture_sampler", 0);
         // Render each gameObject

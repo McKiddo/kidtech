@@ -21,7 +21,7 @@ public class DummyGame implements IGameLogic {
 
     private final Camera camera;
 
-    private GameObject[] gameObjects;
+    private GameObject[] gameObjects = {};
 
     private Vector3f ambientLight;
 
@@ -44,7 +44,7 @@ public class DummyGame implements IGameLogic {
     public void init(Window window) throws Exception {
         renderer.init(window);
 
-        float reflectance = 0.1f;
+        float reflectance = 0.6f;
 
         Mesh mesh = OBJLoader.loadMesh("/models/tails.obj");
         Texture texture = new Texture("/textures/tails.png");
@@ -64,7 +64,10 @@ public class DummyGame implements IGameLogic {
         PointLight.Attenuation att = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
         pointLight.setAttenuation(att);
 
-        directionalLight = new DirectionalLight(lightColour, lightPosition, lightIntensity);
+        Vector3f dirLightColour = new Vector3f(1, 1, 1);
+        Vector3f dirLightPosition = new Vector3f(0, 0, 1);
+        float dirLightIntensity = 1.0f;
+        directionalLight = new DirectionalLight(dirLightColour, dirLightPosition, dirLightIntensity);
     }
 
     @Override
@@ -101,9 +104,9 @@ public class DummyGame implements IGameLogic {
         } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
             this.pointLight.getPosition().x += 0.1f;
         }
-        if (window.isKeyPressed(GLFW_KEY_PAGE_DOWN)) {
+        if (window.isKeyPressed(GLFW_KEY_BACKSLASH)) {
             this.pointLight.getPosition().y -= 0.1f;
-        } else if (window.isKeyPressed(GLFW_KEY_PAGE_UP)) {
+        } else if (window.isKeyPressed(GLFW_KEY_RIGHT_BRACKET)) {
             this.pointLight.getPosition().y += 0.1f;
         }
     }
@@ -128,7 +131,7 @@ public class DummyGame implements IGameLogic {
                 lightAngle = -90;
             }
         } else if (lightAngle <= -80 || lightAngle >= 80) {
-            float factor = 1 - (float) (Math.abs(lightAngle) - 80) / 10.0f;
+            float factor = 1 - (Math.abs(lightAngle) - 80) / 10.0f;
             directionalLight.setIntensity(factor);
             directionalLight.getColor().y = Math.max(factor, 0.9f);
             directionalLight.getColor().z = Math.max(factor, 0.5f);
@@ -139,13 +142,13 @@ public class DummyGame implements IGameLogic {
             directionalLight.getColor().z = 1;
         }
         double angRad = Math.toRadians(lightAngle);
-        //directionalLight.getDirection().x = (float) Math.sin(angRad);
-        //directionalLight.getDirection().y = (float) Math.cos(angRad);
+        directionalLight.getDirection().x = (float) Math.sin(angRad);
+        directionalLight.getDirection().y = (float) Math.cos(angRad);
     }
 
     @Override
     public void render(Window window) {
-        renderer.render(window, camera, gameObjects, ambientLight, pointLight);
+        renderer.render(window, camera, gameObjects, ambientLight, pointLight, directionalLight);
     }
 
     @Override
