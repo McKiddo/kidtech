@@ -109,6 +109,10 @@ public class DummyGame implements IGameLogic {
         } else if (window.isKeyPressed(GLFW_KEY_RIGHT_BRACKET)) {
             this.pointLight.getPosition().y += 0.1f;
         }
+
+        if (mouseInput.getWheelVelocity() != 0) {
+            gameObjects[0].setScale(gameObjects[0].getScale() + mouseInput.getWheelVelocity() / 100);
+        }
     }
 
     @Override
