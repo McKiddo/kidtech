@@ -29,6 +29,8 @@ public class DummyGame implements IGameLogic {
 
     private DirectionalLight directionalLight;
 
+    private SpotLight spotLight;
+
     private float lightAngle;
 
     private static final float CAMERA_POS_STEP = 0.05f;
@@ -44,10 +46,10 @@ public class DummyGame implements IGameLogic {
     public void init(Window window) throws Exception {
         renderer.init(window);
 
-        float reflectance = 0.6f;
+        float reflectance = 0.4f;
 
-        Mesh mesh = OBJLoader.loadMesh("/models/tails.obj");
-        Texture texture = new Texture("/textures/tails.png");
+        Mesh mesh = OBJLoader.loadMesh("/models/zelenski.obj");
+        Texture texture = new Texture("/textures/zelenski.png");
         Material material = new Material(texture, reflectance);
 
         mesh.setMaterial(material);
@@ -57,17 +59,31 @@ public class DummyGame implements IGameLogic {
         gameObjects = new GameObject[]{gameObject};
 
         ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
-        Vector3f lightColour = new Vector3f(1, 1, 1);
+
+        // Point light
+        Vector3f lightColor = new Vector3f(1, 1, 1);
         Vector3f lightPosition = new Vector3f(0, 0, 1);
         float lightIntensity = 1.0f;
-        pointLight = new PointLight(lightColour, lightPosition, lightIntensity);
+        pointLight = new PointLight(lightColor, lightPosition, lightIntensity);
         PointLight.Attenuation att = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
         pointLight.setAttenuation(att);
 
-        Vector3f dirLightColour = new Vector3f(1, 1, 1);
+        // Directional light
+        Vector3f dirLightColor = new Vector3f(1, 1, 1);
         Vector3f dirLightPosition = new Vector3f(0, 0, 1);
         float dirLightIntensity = 1.0f;
-        directionalLight = new DirectionalLight(dirLightColour, dirLightPosition, dirLightIntensity);
+        directionalLight = new DirectionalLight(dirLightColor, dirLightPosition, dirLightIntensity);
+
+        // Spot light
+        Vector3f spotLightColor = new Vector3f(1, 1, 1);
+        Vector3f spotLightPosition = new Vector3f(0, 3, 2);
+        float spotLightIntensity = 1.0f;
+        PointLight spotPointLight = new PointLight(spotLightColor, spotLightPosition, spotLightIntensity);
+        PointLight.Attenuation spotAtt = new PointLight.Attenuation(0.0f, 0.0f, 0.02f);
+        spotPointLight.setAttenuation(att);
+        Vector3f coneDir = new Vector3f(0, 0, -1);
+        float cutoff = (float) Math.cos(Math.toRadians(140));
+        spotLight = new SpotLight(spotPointLight, coneDir, cutoff);
     }
 
     @Override
@@ -119,7 +135,7 @@ public class DummyGame implements IGameLogic {
 
         if (Math.abs(horizontalVelocity) > 0.4) {
             Vector3f rot = gameObjects[0].getRotation();
-            gameObjects[0].setRotation(rot.x, rot.y + horizontalVelocity, rot.z);
+            gameObjects[0].setRotation(rot.x, rot.y - horizontalVelocity, rot.z);
         }
     }
 
@@ -135,7 +151,7 @@ public class DummyGame implements IGameLogic {
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         }
 
-        // Update directional light direction, intensity and colour
+        // Update directional light direction, intensity and color
         lightAngle += 1.1f;
         if (lightAngle > 90) {
             directionalLight.setIntensity(0);
@@ -160,7 +176,7 @@ public class DummyGame implements IGameLogic {
 
     @Override
     public void render(Window window) {
-        renderer.render(window, camera, gameObjects, ambientLight, pointLight, directionalLight);
+        renderer.render(window, camera, gameObjects, ambientLight, pointLight, spotLight, directionalLight);
     }
 
     @Override
